@@ -98,8 +98,6 @@ if( ! class_exists( 'EDD_Customerio_Connect' ) ) {
 		 * @return      void
 		 */
 		private function includes() {
-			require_once EDD_CUSTOMERIO_CONNECT_DIR . 'includes/scripts.php';
-			require_once EDD_CUSTOMERIO_CONNECT_DIR . 'includes/functions.php';
 			require_once EDD_CUSTOMERIO_CONNECT_DIR . 'includes/libraries/class.customerio.php';
 			require_once EDD_CUSTOMERIO_CONNECT_DIR . 'includes/actions.php';
 		}
