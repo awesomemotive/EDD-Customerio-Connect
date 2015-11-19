@@ -102,6 +102,11 @@ add_action( 'edd_complete_purchase', 'edd_customerio_connect_register_user', 100
  * @return      void
  */
 function edd_customerio_connect_update_user( $user_id, $old_user_data ) {
+	// Bail if API isn't setup
+	if( ! edd_customerio_connect()->api ) {
+		return;
+	}
+
 	// Setup the request body
 	$user_info = get_userdata( $user_id );
 	$user_name = false;
