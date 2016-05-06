@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name:     Easy Digital Downloads - Customer.io Connect
- * Plugin URI:      https://easydigitaldownloads.com/extensions/customerio-connect/
+ * Plugin URI:      https://wordpress.org/plugins/edd-customerio-connect/
  * Description:     Track your customers the easy way with Customer.io
- * Version:         1.0.0
+ * Version:         1.0.1
  * Author:          Daniel J Griffiths
  * Author URI:      http://section214.com
  * Text Domain:     edd-customerio-connect
@@ -14,7 +14,9 @@
 
 
 // Exit if accessed directly
-if( ! defined( 'ABSPATH' ) ) exit;
+if( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 
 if( ! class_exists( 'EDD_Customerio_Connect' ) ) {
@@ -57,7 +59,6 @@ if( ! class_exists( 'EDD_Customerio_Connect' ) ) {
 				self::$instance->setup_constants();
 				self::$instance->includes();
 				self::$instance->load_textdomain();
-				self::$instance->hooks();
 
 				$site_id = edd_get_option( 'edd_customerio_connect_site_id', false );
 				$api_key = edd_get_option( 'edd_customerio_connect_api_key', false );
@@ -100,58 +101,10 @@ if( ! class_exists( 'EDD_Customerio_Connect' ) ) {
 		private function includes() {
 			require_once EDD_CUSTOMERIO_CONNECT_DIR . 'includes/libraries/class.customerio.php';
 			require_once EDD_CUSTOMERIO_CONNECT_DIR . 'includes/actions.php';
-		}
 
-
-		/**
-		 * Run action and filter hooks
-		 *
-		 * @access      private
-		 * @since       1.0.0
-		 * @return      void
-		 */
-		private function hooks() {
-			// Add our extension settings
-			add_filter( 'edd_settings_extensions', array( $this, 'add_settings' ) );
-
-			// Handle licensing
-			if( class_exists( 'EDD_License' ) ) {
-				$license = new EDD_License( __FILE__, 'Customer.io Connect', EDD_CUSTOMERIO_CONNECT_VER, 'Daniel J Griffiths' );
+			if( is_admin() ) {
+				require_once EDD_CUSTOMERIO_CONNECT_DIR . 'includes/admin/settings/register.php';
 			}
-		}
-
-
-		/**
-		 * Add settings
-		 *
-		 * @access      public
-		 * @since       1.0.0
-		 * @param       array $settings The existing plugin settings
-		 * @return      array The modified plugin settings
-		 */
-		public function add_settings( $settings ) {
-			$new_settings = array(
-				array(
-					'id'    => 'edd_customerio_connect_settings',
-					'name'  => '<strong>' . __( 'Customer.io Connect', 'edd-customerio-connect' ) . '</strong>',
-					'desc'  => '',
-					'type'  => 'header'
-				),
-				array(
-					'id'    => 'edd_customerio_connect_site_id',
-					'name'  => __( 'Site ID', 'edd-customerio-connect' ),
-					'desc'  => __( 'Your site ID can be found on the Integrations page of the Customer.io dashboard.', 'edd-customerio-connect' ),
-					'type'  => 'text'
-				),
-				array(
-					'id'    => 'edd_customerio_connect_api_key',
-					'name'  => __( 'API Key', 'edd-customerio-connect' ),
-					'desc'  => __( 'Your API key can be found on the Integrations page of the Customer.io dashboard.', 'edd-customerio-connect' ),
-					'type'  => 'text'
-				),
-			);
-
-			return array_merge( $settings, $new_settings );
 		}
 
 
